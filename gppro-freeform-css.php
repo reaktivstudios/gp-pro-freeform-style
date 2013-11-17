@@ -24,6 +24,15 @@ Author URI: http://andrewnorcross.com
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
+if( !defined( 'GPCSS_BASE' ) )
+	define( 'GPCSS_BASE', plugin_basename(__FILE__) );
+
+if( !defined( 'GPCSS_DIR' ) )
+	define( 'GPCSS_DIR', dirname( __FILE__ ) );
+
+if( !defined( 'GPCSS_VER' ) )
+	define( 'GPCSS_VER', '0.0.1.0' );
+
 class GP_Pro_Freeform_CSS
 {
 
@@ -40,8 +49,15 @@ class GP_Pro_Freeform_CSS
 	 */
 	private function __construct() {
 
-		add_action			( 'admin_notices',				array(	$this,	'gppro_active_check'		),	10		);
+		// general backend
+		add_action			(	'plugins_loaded',					array(	$this,	'textdomain'				)			);
+		add_action			(	'admin_enqueue_scripts',			array(	$this,	'admin_scripts'				)			);
+		add_action			(	'admin_notices',					array(	$this,	'gppro_active_check'		),	10		);
 
+		// GP Pro specific
+		add_filter			(	'gppro_admin_blocks',				array(	$this,	'freeform_block'			),	10,	2	);
+		add_filter			(	'gppro_sections',					array(	$this,	'freeform_section'			),	10,	2	);
+		add_filter			(	'gppro_css_builder',				array(	$this,	'freeform_builder'			),	10,	3	);
 	}
 
 	/**
@@ -55,6 +71,18 @@ class GP_Pro_Freeform_CSS
 		if ( !self::$instance )
 			self::$instance = new self;
 		return self::$instance;
+	}
+
+	/**
+	 * load textdomain
+	 *
+	 * @return
+	 */
+
+	public function textdomain() {
+
+		load_plugin_textdomain( 'gpcss', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
+
 	}
 
 	/**
@@ -84,8 +112,123 @@ class GP_Pro_Freeform_CSS
 
 	}
 
+	/**
+	 * call admin CSS and JS files
+	 *
+	 * @return
+	 */
+
+	public function admin_scripts() {
+
+		$screen	= get_current_screen();
+
+		if ( $screen->base != 'genesis_page_genesis-palette-pro' )
+			return;
+
+		wp_enqueue_style( 'gppro-freeform',		plugins_url( 'lib/css/gppro.freeform.css',	__FILE__ ),	array(), GPCSS_VER, 'all' );
+		wp_enqueue_script( 'textarea-size', 	plugins_url( 'lib/js/autosize.min.js',		__FILE__),	array( 'jquery' ), '1.18.1', true );
+		wp_enqueue_script( 'gppro-freeform',	plugins_url( 'lib/js/gppro.freeform.js',	__FILE__),	array( 'jquery' ), GPCSS_VER, true );
 
 
+	}
+
+	/**
+	 * add block to side
+	 *
+	 * @return
+	 */
+
+	public function freeform_block( $blocks ) {
+
+		$blocks[] = array(
+			'tab'		=> __( 'Freeform CSS', 'gppro' ),
+			'title'		=> __( 'Freeform CSS', 'gppro' ),
+			'slug'		=> 'freeform_css',
+//			'callback'	=> 'build_freeform',
+		);
+
+		return $blocks;
+
+	}
+
+	/**
+	 * add section to side
+	 *
+	 * @return
+	 */
+
+	public function freeform_section( $items, $class ) {
+
+		$items['freeform_css']	= array(
+			array(
+				'headline'	=> __( 'Freeform CSS', 'gppro' ),
+				'intro'		=> __( 'Enter any extra or unique CSS in the field below. Please note this will not be displayed in the preview pane during entry.', 'gppro' ),
+				'title'		=> '',
+				'data'		=> array(
+
+					array(
+						'label'		=> __( 'Freeform', 'gppro' ),
+						'input'		=> 'custom',
+						'field'		=> 'freeform-css',
+						'target'	=> '',
+						'type'		=> '',
+						'callback'	=> array( $this, 'freeform_input' )
+					),
+
+				),
+			),
+		); // end footer main section
+
+		return $items;
+
+	}
+
+	/**
+	 * create CSS input
+	 *
+	 * @return
+	 */
+
+	static function freeform_input( $item ) {
+
+			$id			= GP_Pro_Helper::get_field_id( $item['field'] );
+			$name		= GP_Pro_Helper::get_field_name( $item['field'] );
+			$value		= esc_attr( GP_Pro_Helper::get_field_value( $item['field'] ) );
+
+			$input	= '';
+
+			$input	.= '<div class="gppro-input gppro-freeform-input">';
+
+				$input	.= '<div class="gppro-input-wrap">';
+
+				$input	.= '<textarea name="'.$name.'" id="'.$id.'" class="widefat code css-entry">'.esc_attr( $value ).'</textarea>';
+
+				$input	.= '</div>';
+
+			$input	.= '</div>';
+
+			return $input;
+
+	}
+
+	/**
+	 * add freeform CSS to builder file
+	 *
+	 * @return
+	 */
+
+	public function freeform_builder( $custom, $data, $class ) {
+
+		if ( !isset( $data['freeform-css'] ) || isset( $data['freeform-css'] ) && empty( $data['freeform-css'] )  )
+			return;
+
+		$custom	= '/* custom freeform CSS */'."\n";
+
+		$custom	.= $data['freeform-css'];
+
+		return $custom;
+
+	}
 
 /// end class
 }
