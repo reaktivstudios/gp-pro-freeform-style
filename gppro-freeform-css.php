@@ -52,7 +52,7 @@ class GP_Pro_Freeform_CSS
 		// general backend
 		add_action			(	'plugins_loaded',					array(	$this,	'textdomain'				)			);
 		add_action			(	'admin_enqueue_scripts',			array(	$this,	'admin_scripts'				)			);
-		add_action			(	'admin_notices',					array(	$this,	'gppro_active_check'		),	10		);
+//		add_action			(	'admin_notices',					array(	$this,	'gppro_active_check'		),	10		);
 
 		// GP Pro specific
 		add_filter			(	'gppro_admin_blocks',				array(	$this,	'freeform_block'			),	10,	2	);
@@ -98,17 +98,16 @@ class GP_Pro_Freeform_CSS
 		if ( $screen->parent_file !== 'plugins.php' )
 			return;
 
-		if ( is_plugin_active( 'genesis-palette-pro/genesis-palette-pro.php' ) )
-			return;
+		if ( !is_plugin_active( 'genesis-palette-pro/genesis-palette-pro.php' ) ) :
 
-		echo '<div id="message" class="error fade below-h2"><p><strong>'.__( 'This plugin requires Genesis Design Palette Pro to function.', 'gpcss' ).'</strong></p></div>';
+			echo '<div id="message" class="error fade below-h2"><p><strong>'.__( 'This plugin requires Genesis Design Palette Pro to function.', 'gpcss' ).'</strong></p></div>';
 
-		// hacky CSS
-		echo '<style>div#message.updated{ display: none; }</style>';
+			// hide activation method
+			unset( $_GET['activate'] );
 
-		deactivate_plugins( plugin_basename( __FILE__ ) );
+			deactivate_plugins( plugin_basename( __FILE__ ) );
 
-		return false;
+		endif;
 
 	}
 
