@@ -52,7 +52,7 @@ class GP_Pro_Freeform_CSS
 		// general backend
 		add_action			(	'plugins_loaded',					array(	$this,	'textdomain'				)			);
 		add_action			(	'admin_enqueue_scripts',			array(	$this,	'admin_scripts'				)			);
-//		add_action			(	'admin_notices',					array(	$this,	'gppro_active_check'		),	10		);
+		add_action			(	'admin_notices',					array(	$this,	'gppro_active_check'		),	10		);
 
 		// GP Pro specific
 		add_filter			(	'gppro_admin_blocks',				array(	$this,	'freeform_block'			),	10,	2	);
