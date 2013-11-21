@@ -140,10 +140,9 @@ class GP_Pro_Freeform_CSS
 	public function freeform_block( $blocks ) {
 
 		$blocks[] = array(
-			'tab'		=> __( 'Freeform CSS', 'gppro' ),
-			'title'		=> __( 'Freeform CSS', 'gppro' ),
+			'tab'		=> __( 'Freeform CSS', 'gpcss' ),
+			'title'		=> __( 'Freeform CSS', 'gpcss' ),
 			'slug'		=> 'freeform_css',
-//			'callback'	=> 'build_freeform',
 		);
 
 		return $blocks;
@@ -160,13 +159,13 @@ class GP_Pro_Freeform_CSS
 
 		$items['freeform_css']	= array(
 			array(
-				'headline'	=> __( 'Freeform CSS', 'gppro' ),
-				'intro'		=> __( 'Enter any extra or unique CSS in the field below. Please note this will not be displayed in the preview pane during entry.', 'gppro' ),
+				'headline'	=> __( 'Freeform CSS', 'gpcss' ),
+				'intro'		=> __( 'Enter any extra or unique CSS in the field below. Please note this will not be displayed in the preview pane during entry.', 'gpcss' ),
 				'title'		=> '',
 				'data'		=> array(
 
 					array(
-						'label'		=> __( 'Freeform', 'gppro' ),
+						'label'		=> __( 'Freeform', 'gpcss' ),
 						'input'		=> 'custom',
 						'field'		=> 'freeform-css',
 						'target'	=> '',
