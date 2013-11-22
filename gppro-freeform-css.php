@@ -55,7 +55,7 @@ class GP_Pro_Freeform_CSS
 		add_action			(	'admin_notices',					array(	$this,	'gppro_active_check'		),	10		);
 
 		// GP Pro specific
-		add_filter			(	'gppro_admin_blocks',				array(	$this,	'freeform_block'			)			);
+		add_filter			(	'gppro_admin_blocks',				array(	$this,	'freeform_block'			),	20		);
 		add_filter			(	'gppro_sections',					array(	$this,	'freeform_section'			),	10,	2	);
 		add_filter			(	'gppro_css_builder',				array(	$this,	'freeform_builder'			),	10,	3	);
 	}
@@ -158,12 +158,13 @@ class GP_Pro_Freeform_CSS
 	public function freeform_section( $sections, $class ) {
 
 		$sections['freeform_css']	= array(
+
 			'freeform-css-setup'	=> array(
 				'headline'	=> __( 'Freeform CSS', 'gpcss' ),
 				'intro'		=> __( 'Enter any extra or unique CSS in the field below. Please note this will not be displayed in the preview pane during entry.', 'gpcss' ),
 				'title'		=> '',
 				'data'		=> array(
-					'freeform-css'	=> array((
+					'freeform-css'	=> array(
 						'label'		=> __( 'Freeform', 'gpcss' ),
 						'input'		=> 'custom',
 						'field'		=> 'freeform-css',
@@ -177,7 +178,7 @@ class GP_Pro_Freeform_CSS
 		); // end section
 
 
-		return $items;
+		return $sections;
 
 	}
 
