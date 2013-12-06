@@ -1,4 +1,4 @@
-=== Freeform CSS - Genesis Design Pallete Pro ===
+=== Genesis Design Palette Pro - Freeform CSS ===
 Contributors: norcross
 Donate link: http://andrewnorcross.com/donate
 Tags: gravity forms, forms, tooltips

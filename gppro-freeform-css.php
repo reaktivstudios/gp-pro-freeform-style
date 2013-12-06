@@ -1,6 +1,6 @@
 <?php
 /*
-Plugin Name: Freeform CSS - Genesis Design Pallete Pro
+Plugin Name: Genesis Design Palette Pro - Freeform CSS
 Plugin URI: http://andrewnorcross.com/plugins/
 Description: Adds a setting space for freeform CSS
 Author: Andrew Norcross
