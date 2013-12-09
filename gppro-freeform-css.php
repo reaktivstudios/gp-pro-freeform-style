@@ -125,8 +125,8 @@ class GP_Pro_Freeform_CSS
 			return;
 
 		wp_enqueue_style( 'gppro-freeform',		plugins_url( 'lib/css/gppro.freeform.css',	__FILE__ ),	array(), GPCSS_VER, 'all' );
-		wp_enqueue_script( 'textarea-size', 	plugins_url( 'lib/js/autosize.min.js',		__FILE__),	array( 'jquery' ), '1.18.1', true );
-		wp_enqueue_script( 'gppro-freeform',	plugins_url( 'lib/js/gppro.freeform.js',	__FILE__),	array( 'jquery' ), GPCSS_VER, true );
+		wp_enqueue_script( 'textarea-size', 	plugins_url( 'lib/js/autosize.min.js',		__FILE__ ),	array( 'jquery' ), '1.18.1', true );
+		wp_enqueue_script( 'gppro-freeform',	plugins_url( 'lib/js/gppro.freeform.js',	__FILE__ ),	array( 'jquery' ), GPCSS_VER, true );
 
 
 	}
@@ -142,6 +142,7 @@ class GP_Pro_Freeform_CSS
 		$blocks['freeform-css'] = array(
 			'tab'		=> __( 'Freeform CSS', 'gpcss' ),
 			'title'		=> __( 'Freeform CSS', 'gpcss' ),
+			'intro'		=> __( 'Enter any extra or unique CSS in the field below. Please note this will not be displayed in the preview pane during entry.', 'gpcss' ),
 			'slug'		=> 'freeform_css',
 		);
 
@@ -160,14 +161,11 @@ class GP_Pro_Freeform_CSS
 		$sections['freeform_css']	= array(
 
 			'freeform-css-setup'	=> array(
-				'headline'	=> __( 'Freeform CSS', 'gpcss' ),
-				'intro'		=> __( 'Enter any extra or unique CSS in the field below. Please note this will not be displayed in the preview pane during entry.', 'gpcss' ),
 				'title'		=> '',
 				'data'		=> array(
 					'freeform-css'	=> array(
 						'label'		=> __( 'Freeform', 'gpcss' ),
 						'input'		=> 'custom',
-						'field'		=> 'freeform-css',
 						'target'	=> '',
 						'type'		=> '',
 						'callback'	=> array( $this, 'freeform_input' )
@@ -188,11 +186,11 @@ class GP_Pro_Freeform_CSS
 	 * @return
 	 */
 
-	static function freeform_input( $item ) {
+	static function freeform_input( $field, $item ) {
 
-			$id			= GP_Pro_Helper::get_field_id( $item['field'] );
-			$name		= GP_Pro_Helper::get_field_name( $item['field'] );
-			$value		= esc_attr( GP_Pro_Helper::get_field_value( $item['field'] ) );
+			$id			= GP_Pro_Helper::get_field_id( $field );
+			$name		= GP_Pro_Helper::get_field_name( $field );
+			$value		= GP_Pro_Helper::get_field_value( $field );
 
 			$input	= '';
 
