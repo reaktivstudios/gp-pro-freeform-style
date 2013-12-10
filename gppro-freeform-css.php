@@ -188,23 +188,21 @@ class GP_Pro_Freeform_CSS
 
 	static function freeform_input( $field, $item ) {
 
-			$id			= GP_Pro_Helper::get_field_id( $field );
-			$name		= GP_Pro_Helper::get_field_name( $field );
-			$value		= GP_Pro_Helper::get_field_value( $field );
+		$id			= GP_Pro_Helper::get_field_id( $field );
+		$name		= GP_Pro_Helper::get_field_name( $field );
+		$value		= GP_Pro_Helper::get_field_value( $field );
 
-			$input	= '';
+		$input	= '';
 
-			$input	.= '<div class="gppro-input gppro-freeform-input">';
+		$input	.= '<div class="gppro-input gppro-freeform-input">';
 
-				$input	.= '<div class="gppro-input-wrap">';
-
-				$input	.= '<textarea name="'.$name.'" id="'.$id.'" class="widefat code css-entry">'.esc_attr( $value ).'</textarea>';
-
-				$input	.= '</div>';
-
+			$input	.= '<div class="gppro-input-wrap">';
+			$input	.= '<textarea name="'.$name.'" id="'.$id.'" class="widefat code css-entry">'.esc_attr( $value ).'</textarea>';
 			$input	.= '</div>';
 
-			return $input;
+		$input	.= '</div>';
+
+		return $input;
 
 	}
 
