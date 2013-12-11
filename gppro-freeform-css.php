@@ -167,10 +167,9 @@ class GP_Pro_Freeform_CSS
 						'label'		=> __( 'Freeform', 'gpcss' ),
 						'input'		=> 'custom',
 						'target'	=> '',
-						'type'		=> '',
+						'selector'	=> '',
 						'callback'	=> array( $this, 'freeform_input' )
 					),
-
 				),
 			),
 		); // end section
@@ -202,6 +201,7 @@ class GP_Pro_Freeform_CSS
 
 		$input	.= '</div>';
 
+
 		return $input;
 
 	}
@@ -214,7 +214,7 @@ class GP_Pro_Freeform_CSS
 
 	public function freeform_builder( $custom, $data, $class ) {
 
-		if ( !isset( $data['freeform-css'] ) || isset( $data['freeform-css'] ) && empty( $data['freeform-css'] )  )
+		if ( ! isset( $data['freeform-css'] ) || isset( $data['freeform-css'] ) && empty( $data['freeform-css'] )  )
 			return;
 
 		$custom	= '/* custom freeform CSS */'."\n";
