@@ -142,7 +142,7 @@ class GP_Pro_Freeform_CSS
 		$blocks['freeform-css'] = array(
 			'tab'		=> __( 'Freeform CSS', 'gpcss' ),
 			'title'		=> __( 'Freeform CSS', 'gpcss' ),
-			'intro'		=> __( 'Enter any extra or unique CSS in the field below. Please note this will not be displayed in the preview pane during entry.', 'gpcss' ),
+			'intro'		=> __( 'Enter any extra or unique CSS in the field below.', 'gpcss' ),
 			'slug'		=> 'freeform_css',
 		);
 
@@ -195,8 +195,9 @@ class GP_Pro_Freeform_CSS
 
 		$input	.= '<div class="gppro-input gppro-freeform-input">';
 
-			$input	.= '<div class="gppro-input-wrap">';
+			$input	.= '<div class="gppro-input-wrap gppro-freeform-wrap">';
 			$input	.= '<textarea name="'.$name.'" id="'.$id.'" class="widefat code css-entry">'.esc_attr( $value ).'</textarea>';
+			$input	.= '<span class="button button-secondary button-small gppro-freeform-preview">'. __( 'Preview CSS', 'gpcss' ).'</span>';
 			$input	.= '</div>';
 
 		$input	.= '</div>';

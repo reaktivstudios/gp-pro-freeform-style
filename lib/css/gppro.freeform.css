@@ -1,4 +1,10 @@
+.gppro-freeform-input span.gppro-freeform-preview {
+	cursor: pointer;
+	float: right;
+}
+
 .gppro-freeform-input textarea.css-entry {
 	font-size: 11px;
 	min-height: 300px;
+	margin: 0 0 10px;
 }
