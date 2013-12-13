@@ -197,7 +197,7 @@ class GP_Pro_Freeform_CSS
 
 			$input	.= '<div class="gppro-input-wrap gppro-freeform-wrap">';
 			$input	.= '<textarea name="'.$name.'" id="'.$id.'" class="widefat code css-entry">'.esc_attr( $value ).'</textarea>';
-			$input	.= '<span class="button button-secondary button-small gppro-freeform-preview">'. __( 'Preview CSS', 'gpcss' ).'</span>';
+			$input	.= '<span class="button button-secondary button-small gppro-button-right gppro-freeform-preview">'. __( 'Preview CSS', 'gpcss' ).'</span>';
 			$input	.= '</div>';
 
 		$input	.= '</div>';
