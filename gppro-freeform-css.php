@@ -55,7 +55,7 @@ class GP_Pro_Freeform_CSS
 		add_action			(	'admin_notices',					array(	$this,	'gppro_active_check'		),	10		);
 
 		// GP Pro specific
-		add_filter			(	'gppro_admin_block_add',			array(	$this,	'freeform_block'			),	81		);
+		add_filter			(	'gppro_admin_block_add',			array(	$this,	'freeform_block'			),	1		);
 		add_filter			(	'gppro_sections',					array(	$this,	'freeform_section'			),	10,	2	);
 		add_filter			(	'gppro_css_builder',				array(	$this,	'freeform_builder'			),	10,	3	);
 	}
@@ -125,6 +125,7 @@ class GP_Pro_Freeform_CSS
 			return;
 
 		wp_enqueue_style( 'gppro-freeform',		plugins_url( 'lib/css/gppro.freeform.css',	__FILE__ ),	array(), GPCSS_VER, 'all' );
+
 		wp_enqueue_script( 'textarea-size', 	plugins_url( 'lib/js/autosize.min.js',		__FILE__ ),	array( 'jquery' ), '1.18.1', true );
 		wp_enqueue_script( 'gppro-freeform',	plugins_url( 'lib/js/gppro.freeform.js',	__FILE__ ),	array( 'jquery' ), GPCSS_VER, true );
 
@@ -160,18 +161,54 @@ class GP_Pro_Freeform_CSS
 
 		$sections['freeform_css']	= array(
 
-			'freeform-css-setup'	=> array(
-				'title'		=> '',
+			'freeform-css-global-setup'	=> array(
+				'title'		=> __( 'Global CSS', 'gpcss' ),
 				'data'		=> array(
-					'freeform-css'	=> array(
-						'label'		=> __( 'Freeform', 'gpcss' ),
+					'freeform-css-global'	=> array(
 						'input'		=> 'custom',
-						'target'	=> '',
-						'selector'	=> '',
-						'callback'	=> array( $this, 'freeform_input' )
+						'desc'		=> __( 'This CSS will apply site-wide.', 'gpcss' ),
+						'viewport'	=> 'global',
+						'callback'	=> array( $this, 'freeform_css_input' )
 					),
 				),
 			),
+
+			'freeform-css-mobile-setup'	=> array(
+				'title'		=> __( 'Mobile CSS', 'gpcss' ),
+				'data'		=> array(
+					'freeform-css-mobile'	=> array(
+						'input'		=> 'custom',
+						'desc'		=> __( 'This CSS will apply to 480px and below', 'gpcss' ),
+						'viewport'	=> 'mobile',
+						'callback'	=> array( $this, 'freeform_css_input' )
+					),
+				),
+			),
+
+			'freeform-css-tablet-setup'	=> array(
+				'title'		=> __( 'Tablet CSS', 'gpcss' ),
+				'data'		=> array(
+					'freeform-css-tablet'	=> array(
+						'input'		=> 'custom',
+						'desc'		=> __( 'This CSS will apply to 768px and below', 'gpcss' ),
+						'viewport'	=> 'tablet',
+						'callback'	=> array( $this, 'freeform_css_input' )
+					),
+				),
+			),
+
+			'freeform-css-desktop-setup'	=> array(
+				'title'		=> __( 'Desktop CSS', 'gpcss' ),
+				'data'		=> array(
+					'freeform-css-desktop'	=> array(
+						'input'		=> 'custom',
+						'desc'		=> __( 'This CSS will apply to 1024px and above', 'gpcss' ),
+						'viewport'	=> 'desktop',
+						'callback'	=> array( $this, 'freeform_css_input' )
+					),
+				),
+			),
+
 		); // end section
 
 
@@ -180,24 +217,31 @@ class GP_Pro_Freeform_CSS
 	}
 
 	/**
-	 * create CSS input
+	 * create CSS inputs
 	 *
 	 * @return
 	 */
 
-	static function freeform_input( $field, $item ) {
+	static function freeform_css_input( $field, $item ) {
 
 		$id			= GP_Pro_Helper::get_field_id( $field );
 		$name		= GP_Pro_Helper::get_field_name( $field );
 		$value		= GP_Pro_Helper::get_field_value( $field );
+
+		$viewport	= isset( $item['viewport'] ) ? esc_attr( $item['viewport'] ) : 'global';
 
 		$input	= '';
 
 		$input	.= '<div class="gppro-input gppro-freeform-input">';
 
 			$input	.= '<div class="gppro-input-wrap gppro-freeform-wrap">';
-			$input	.= '<textarea name="'.$name.'" id="'.$id.'" class="widefat code css-entry">'.esc_attr( $value ).'</textarea>';
-			$input	.= '<span class="button button-secondary button-small gppro-button-right gppro-freeform-preview">'. __( 'Preview CSS', 'gpcss' ).'</span>';
+
+			if ( isset( $item['desc'] ) )
+				$input	.= '<p class="description">'.esc_attr( $item['desc'] ).'</p>';
+
+			$input	.= '<textarea name="'.$name.'" id="'.$id.'" class="widefat code css-entry css-global">'.esc_attr( $value ).'</textarea>';
+
+			$input	.= '<span data-viewport="'.$viewport.'" class="button button-secondary button-small gppro-button-right gppro-freeform-preview">'. __( 'Preview CSS', 'gpcss' ).'</span>';
 			$input	.= '</div>';
 
 		$input	.= '</div>';
@@ -207,6 +251,7 @@ class GP_Pro_Freeform_CSS
 
 	}
 
+
 	/**
 	 * add freeform CSS to builder file
 	 *
@@ -215,12 +260,19 @@ class GP_Pro_Freeform_CSS
 
 	public function freeform_builder( $custom, $data, $class ) {
 
-		if ( ! isset( $data['freeform-css'] ) || isset( $data['freeform-css'] ) && empty( $data['freeform-css'] )  )
-			return;
-
 		$custom	= '/* custom freeform CSS */'."\n";
 
-		$custom	.= $data['freeform-css'];
+		if ( isset( $data['freeform-css-global'] ) && !empty( $data['freeform-css-global'] )  )
+			$custom	.= $data['freeform-css-global'];
+
+		if ( isset( $data['freeform-css-mobile'] ) && !empty( $data['freeform-css-mobile'] )  )
+			$custom	.= '@media only screen and (max-width: 480px) {'.$data['freeform-css-mobile'].'}'."\n";
+
+		if ( isset( $data['freeform-css-tablet'] ) && !empty( $data['freeform-css-tablet'] )  )
+			$custom	.= '@media only screen and (max-width: 768px) {'.$data['freeform-css-tablet'].'}'."\n";
+
+		if ( isset( $data['freeform-css-desktop'] ) && !empty( $data['freeform-css-desktop'] )  )
+			$custom	.= '@media only screen and (min-width: 1024px) {'.$data['freeform-css-desktop'].'}'."\n";
 
 		return $custom;
 
