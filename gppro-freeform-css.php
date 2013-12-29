@@ -1,11 +1,11 @@
 <?php
 /*
 Plugin Name: Genesis Design Palette Pro - Freeform CSS
-Plugin URI: http://andrewnorcross.com/plugins/
+Plugin URI: http://genesisdesignpro.com/
 Description: Adds a setting space for freeform CSS
-Author: Andrew Norcross
-Version: 0.0.1.0
-Requires at least: 3.5
+Author: Reaktiv Studios
+Version: 1.0.0.0
+Requires at least: 3.7
 Author URI: http://andrewnorcross.com
 */
 /*  Copyright 2013 Andrew Norcross
@@ -31,7 +31,7 @@ if( !defined( 'GPCSS_DIR' ) )
 	define( 'GPCSS_DIR', dirname( __FILE__ ) );
 
 if( !defined( 'GPCSS_VER' ) )
-	define( 'GPCSS_VER', '0.0.1.0' );
+	define( 'GPCSS_VER', '1.0.0.0' );
 
 class GP_Pro_Freeform_CSS
 {

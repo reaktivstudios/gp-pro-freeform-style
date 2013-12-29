@@ -1,18 +1,16 @@
 === Genesis Design Palette Pro - Freeform CSS ===
 Contributors: norcross
-Donate link: http://andrewnorcross.com/donate
-Tags: gravity forms, forms, tooltips
 Requires at least: 3.0
-Tested up to: 3.7.1
-Stable tag: 0.0.1.0
+Tested up to: 3.8
+Stable tag: 1.0.0.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Adds a setting space for freeform CSS
+Adds an area for freeform CSS entry in Genesis Design Palette Pro
 
 == Description ==
 
-Adds a setting space for freeform CSS
+Adds an area for freeform CSS entry in Genesis Design Palette Pro
 
 
 == Installation ==
@@ -21,14 +19,14 @@ Adds a setting space for freeform CSS
 
 == Frequently Asked Questions ==
 
-= What? =
+= What do I do with this? =
 
-This
+Install and activate it.
 
 == Screenshots ==
 
 == Changelog ==
 
 
-= 0.0.1 =
+= 1.0.0.0 =
 * Initial release
