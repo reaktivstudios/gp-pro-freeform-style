@@ -55,7 +55,7 @@ class GP_Pro_Freeform_CSS
 		add_action			(	'admin_notices',					array(	$this,	'gppro_active_check'		),	10		);
 
 		// GP Pro specific
-		add_filter			(	'gppro_admin_block_add',			array(	$this,	'freeform_block'			),	1		);
+		add_filter			(	'gppro_admin_block_add',			array(	$this,	'freeform_block'			),	81		);
 		add_filter			(	'gppro_sections',					array(	$this,	'freeform_section'			),	10,	2	);
 		add_filter			(	'gppro_css_builder',				array(	$this,	'freeform_builder'			),	10,	3	);
 	}
