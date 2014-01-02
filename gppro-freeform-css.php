@@ -140,6 +140,9 @@ class GP_Pro_Freeform_CSS
 
 	public function freeform_block( $blocks ) {
 
+		if ( is_multisite() && ! current_user_can( 'unfiltered_html' ) )
+			return $blocks;
+
 		$blocks['freeform-css'] = array(
 			'tab'		=> __( 'Freeform CSS', 'gpcss' ),
 			'title'		=> __( 'Freeform CSS', 'gpcss' ),
