@@ -1,6 +1,6 @@
 <?php
 /*
-Plugin Name: Genesis Design Palette Pro - Freeform CSS
+Plugin Name: Genesis Design Palette Pro - Freeform Style
 Plugin URI: http://genesisdesignpro.com/
 Description: Adds a setting space for freeform CSS
 Author: Reaktiv Studios
@@ -81,7 +81,7 @@ class GP_Pro_Freeform_CSS
 
 	public function textdomain() {
 
-		load_plugin_textdomain( 'gppro-freeform-css', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
+		load_plugin_textdomain( 'gp-pro-freeform-style', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
 
 	}
 
@@ -100,7 +100,7 @@ class GP_Pro_Freeform_CSS
 
 		if ( !is_plugin_active( 'genesis-palette-pro/genesis-palette-pro.php' ) ) :
 
-			echo '<div id="message" class="error fade below-h2"><p><strong>'.__( 'This plugin requires Genesis Design Palette Pro to function.', 'gppro-freeform-css' ).'</strong></p></div>';
+			echo '<div id="message" class="error fade below-h2"><p><strong>'.__( 'This plugin requires Genesis Design Palette Pro to function.', 'gp-pro-freeform-style' ).'</strong></p></div>';
 
 			// hide activation method
 			unset( $_GET['activate'] );
@@ -144,9 +144,9 @@ class GP_Pro_Freeform_CSS
 			return $blocks;
 
 		$blocks['freeform-css'] = array(
-			'tab'		=> __( 'Freeform CSS', 'gppro-freeform-css' ),
-			'title'		=> __( 'Freeform CSS', 'gppro-freeform-css' ),
-			'intro'		=> __( 'Enter any extra or unique CSS in the field below.', 'gppro-freeform-css' ),
+			'tab'		=> __( 'Freeform CSS', 'gp-pro-freeform-style' ),
+			'title'		=> __( 'Freeform CSS', 'gp-pro-freeform-style' ),
+			'intro'		=> __( 'Enter any extra or unique CSS in the field below.', 'gp-pro-freeform-style' ),
 			'slug'		=> 'freeform_css',
 		);
 
@@ -165,11 +165,11 @@ class GP_Pro_Freeform_CSS
 		$sections['freeform_css']	= array(
 
 			'freeform-css-global-setup'	=> array(
-				'title'		=> __( 'Global CSS', 'gppro-freeform-css' ),
+				'title'		=> __( 'Global CSS', 'gp-pro-freeform-style' ),
 				'data'		=> array(
 					'freeform-css-global'	=> array(
 						'input'		=> 'custom',
-						'desc'		=> __( 'This CSS will apply site-wide.', 'gppro-freeform-css' ),
+						'desc'		=> __( 'This CSS will apply site-wide.', 'gp-pro-freeform-style' ),
 						'viewport'	=> 'global',
 						'callback'	=> array( $this, 'freeform_css_input' )
 					),
@@ -177,11 +177,11 @@ class GP_Pro_Freeform_CSS
 			),
 
 			'freeform-css-mobile-setup'	=> array(
-				'title'		=> __( 'Mobile CSS', 'gppro-freeform-css' ),
+				'title'		=> __( 'Mobile CSS', 'gp-pro-freeform-style' ),
 				'data'		=> array(
 					'freeform-css-mobile'	=> array(
 						'input'		=> 'custom',
-						'desc'		=> __( 'This CSS will apply to 480px and below', 'gppro-freeform-css' ),
+						'desc'		=> __( 'This CSS will apply to 480px and below', 'gp-pro-freeform-style' ),
 						'viewport'	=> 'mobile',
 						'callback'	=> array( $this, 'freeform_css_input' )
 					),
@@ -189,11 +189,11 @@ class GP_Pro_Freeform_CSS
 			),
 
 			'freeform-css-tablet-setup'	=> array(
-				'title'		=> __( 'Tablet CSS', 'gppro-freeform-css' ),
+				'title'		=> __( 'Tablet CSS', 'gp-pro-freeform-style' ),
 				'data'		=> array(
 					'freeform-css-tablet'	=> array(
 						'input'		=> 'custom',
-						'desc'		=> __( 'This CSS will apply to 768px and below', 'gppro-freeform-css' ),
+						'desc'		=> __( 'This CSS will apply to 768px and below', 'gp-pro-freeform-style' ),
 						'viewport'	=> 'tablet',
 						'callback'	=> array( $this, 'freeform_css_input' )
 					),
@@ -201,11 +201,11 @@ class GP_Pro_Freeform_CSS
 			),
 
 			'freeform-css-desktop-setup'	=> array(
-				'title'		=> __( 'Desktop CSS', 'gppro-freeform-css' ),
+				'title'		=> __( 'Desktop CSS', 'gp-pro-freeform-style' ),
 				'data'		=> array(
 					'freeform-css-desktop'	=> array(
 						'input'		=> 'custom',
-						'desc'		=> __( 'This CSS will apply to 1024px and above', 'gppro-freeform-css' ),
+						'desc'		=> __( 'This CSS will apply to 1024px and above', 'gp-pro-freeform-style' ),
 						'viewport'	=> 'desktop',
 						'callback'	=> array( $this, 'freeform_css_input' )
 					),
@@ -244,7 +244,7 @@ class GP_Pro_Freeform_CSS
 
 			$input	.= '<textarea name="'.$name.'" id="'.$id.'" class="widefat code css-entry css-global">'.esc_attr( $value ).'</textarea>';
 
-			$input	.= '<span data-viewport="'.$viewport.'" class="button button-secondary button-small gppro-button-right gppro-freeform-preview">'. __( 'Preview CSS', 'gppro-freeform-css' ).'</span>';
+			$input	.= '<span data-viewport="'.$viewport.'" class="button button-secondary button-small gppro-button-right gppro-freeform-preview">'. __( 'Preview CSS', 'gp-pro-freeform-style' ).'</span>';
 			$input	.= '</div>';
 
 		$input	.= '</div>';

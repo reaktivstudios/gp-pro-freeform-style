@@ -1,4 +1,4 @@
-=== Genesis Design Palette Pro - Freeform CSS ===
+=== Genesis Design Palette Pro - Freeform Style ===
 Contributors: norcross, reaktivstudios
 Requires at least: 3.7
 Tested up to: 3.8
