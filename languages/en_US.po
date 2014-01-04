@@ -1,0 +1,66 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: gppro-freeform-css\n"
+"POT-Creation-Date: 2014-01-03 20:22-0500\n"
+"PO-Revision-Date: 2014-01-03 20:22-0500\n"
+"Last-Translator: Andrew Norcross <andrew@andrewnorcross.com>\n"
+"Language-Team: \n"
+"Language: en_US\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.6.3\n"
+"X-Poedit-Basepath: ../\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-KeywordsList: _;__;_e\n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Poedit-SearchPath-1: lib\n"
+
+#: gppro-freeform-css.php:103
+msgid "This plugin requires Genesis Design Palette Pro to function."
+msgstr ""
+
+#: gppro-freeform-css.php:147 gppro-freeform-css.php:148
+msgid "Freeform CSS"
+msgstr ""
+
+#: gppro-freeform-css.php:149
+msgid "Enter any extra or unique CSS in the field below."
+msgstr ""
+
+#: gppro-freeform-css.php:168
+msgid "Global CSS"
+msgstr ""
+
+#: gppro-freeform-css.php:172
+msgid "This CSS will apply site-wide."
+msgstr ""
+
+#: gppro-freeform-css.php:180
+msgid "Mobile CSS"
+msgstr ""
+
+#: gppro-freeform-css.php:184
+msgid "This CSS will apply to 480px and below"
+msgstr ""
+
+#: gppro-freeform-css.php:192
+msgid "Tablet CSS"
+msgstr ""
+
+#: gppro-freeform-css.php:196
+msgid "This CSS will apply to 768px and below"
+msgstr ""
+
+#: gppro-freeform-css.php:204
+msgid "Desktop CSS"
+msgstr ""
+
+#: gppro-freeform-css.php:208
+msgid "This CSS will apply to 1024px and above"
+msgstr ""
+
+#: gppro-freeform-css.php:247
+msgid "Preview CSS"
+msgstr ""

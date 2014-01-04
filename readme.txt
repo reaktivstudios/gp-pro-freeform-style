@@ -1,8 +1,8 @@
 === Genesis Design Palette Pro - Freeform CSS ===
-Contributors: norcross
-Requires at least: 3.0
+Contributors: norcross, reaktivstudios
+Requires at least: 3.7
 Tested up to: 3.8
-Stable tag: 1.0.0.0
+Stable tag: 1.0.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -10,7 +10,7 @@ Adds an area for freeform CSS entry in Genesis Design Palette Pro
 
 == Description ==
 
-Adds an area for freeform CSS entry in Genesis Design Palette Pro
+Adds an area for freeform CSS entry in Genesis Design Palette Pro. Requires the [Genesis Design Palette Pro](http://genesisdesignpro.com/ "Genesis Design Palette Pro") plugin.
 
 
 == Installation ==
@@ -28,5 +28,5 @@ Install and activate it.
 == Changelog ==
 
 
-= 1.0.0.0 =
+= 1.0.0 =
 * Initial release
