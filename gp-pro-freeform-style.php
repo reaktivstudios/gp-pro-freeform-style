@@ -268,23 +268,33 @@ class GP_Pro_Freeform_CSS
 	 * @return
 	 */
 
-	public function freeform_builder( $custom, $data, $class ) {
+	public function freeform_builder( $setup, $data, $class ) {
 
-		$custom	= '/* custom freeform CSS */'."\n";
+		$setup	.= '/* custom freeform CSS */'."\n";
 
-		if ( isset( $data['freeform-css-global'] ) && !empty( $data['freeform-css-global'] )  )
-			$custom	.= $data['freeform-css-global'];
+		if ( isset( $data['freeform-css-global'] ) && !empty( $data['freeform-css-global'] ) ) {
+			$setup	.= $data['freeform-css-global']."\n\n";
+		}
 
-		if ( isset( $data['freeform-css-mobile'] ) && !empty( $data['freeform-css-mobile'] )  )
-			$custom	.= '@media only screen and (max-width: 480px) {'.$data['freeform-css-mobile'].'}'."\n";
+		if ( isset( $data['freeform-css-mobile'] ) && !empty( $data['freeform-css-mobile'] )  ) {
+			$setup	.= '@media only screen and (max-width: 480px) {'."\n";
+			$setup	.= $data['freeform-css-mobile']."\n";
+			$setup	.= '}'."\n\n";
+		}
 
-		if ( isset( $data['freeform-css-tablet'] ) && !empty( $data['freeform-css-tablet'] )  )
-			$custom	.= '@media only screen and (max-width: 768px) {'.$data['freeform-css-tablet'].'}'."\n";
+		if ( isset( $data['freeform-css-tablet'] ) && !empty( $data['freeform-css-tablet'] )  ) {
+			$setup	.= '@media only screen and (max-width: 768px) {'."\n";
+			$setup	.= $data['freeform-css-tablet']."\n";
+			$setup	.= '}'."\n\n";
+		}
 
-		if ( isset( $data['freeform-css-desktop'] ) && !empty( $data['freeform-css-desktop'] )  )
-			$custom	.= '@media only screen and (min-width: 1024px) {'.$data['freeform-css-desktop'].'}'."\n";
+		if ( isset( $data['freeform-css-desktop'] ) && !empty( $data['freeform-css-desktop'] )  ) {
+			$setup	.= '@media only screen and (min-width: 1024px) {'."\n";
+			$setup	.= $data['freeform-css-desktop']."\n";
+			$setup	.= '}'."\n\n";
+		}
 
-		return $custom;
+		return $setup;
 
 	}
 
