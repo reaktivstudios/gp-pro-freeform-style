@@ -8,7 +8,7 @@ Version: 1.0.1
 Requires at least: 3.7
 Author URI: http://andrewnorcross.com
 */
-/*  Copyright 2013 Andrew Norcross
+/*  Copyright 2014 Andrew Norcross
 
 	This program is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -24,14 +24,17 @@ Author URI: http://andrewnorcross.com
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-if( !defined( 'GPCSS_BASE' ) )
+if( ! defined( 'GPCSS_BASE' ) ) {
 	define( 'GPCSS_BASE', plugin_basename(__FILE__) );
+}
 
-if( !defined( 'GPCSS_DIR' ) )
+if( ! defined( 'GPCSS_DIR' ) ) {
 	define( 'GPCSS_DIR', dirname( __FILE__ ) );
+}
 
-if( !defined( 'GPCSS_VER' ) )
+if( ! defined( 'GPCSS_VER' ) ) {
 	define( 'GPCSS_VER', '1.0.1' );
+}
 
 class GP_Pro_Freeform_CSS
 {
@@ -68,8 +71,11 @@ class GP_Pro_Freeform_CSS
 	 */
 
 	public static function getInstance() {
-		if ( !self::$instance )
+
+		if ( !self::$instance ) {
 			self::$instance = new self;
+		}
+
 		return self::$instance;
 	}
 
@@ -95,11 +101,12 @@ class GP_Pro_Freeform_CSS
 
 		$screen = get_current_screen();
 
-		if ( $screen->parent_file !== 'plugins.php' )
+		if ( $screen->parent_file !== 'plugins.php' ) {
 			return;
+		}
 
 		// look for our flag
-		$coreactive	= get_option( 'gppro_core_active' );
+		$coreactive	= Genesis_Palette_Pro::check_active();
 
 		// not active. show message
 		if ( ! $coreactive ) :
@@ -128,8 +135,9 @@ class GP_Pro_Freeform_CSS
 
 		$screen	= get_current_screen();
 
-		if ( $screen->base != 'genesis_page_genesis-palette-pro' )
+		if ( $screen->base != 'genesis_page_genesis-palette-pro' ) {
 			return;
+		}
 
 		wp_enqueue_style( 'gppro-freeform',		plugins_url( 'lib/css/gppro.freeform.css',	__FILE__ ),	array(), GPCSS_VER, 'all' );
 
@@ -147,8 +155,9 @@ class GP_Pro_Freeform_CSS
 
 	public function freeform_block( $blocks ) {
 
-		if ( is_multisite() && ! current_user_can( 'unfiltered_html' ) )
+		if ( is_multisite() && ! current_user_can( 'unfiltered_html' ) ) {
 			return $blocks;
+		}
 
 		$blocks['freeform-css'] = array(
 			'tab'		=> __( 'Freeform CSS', 'gp-pro-freeform-style' ),
@@ -303,4 +312,3 @@ class GP_Pro_Freeform_CSS
 
 // Instantiate our class
 $GP_Pro_Freeform_CSS = GP_Pro_Freeform_CSS::getInstance();
-
