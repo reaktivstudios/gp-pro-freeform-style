@@ -1,3 +1,7 @@
+.gppro-input-wrap.gppro-freeform-wrap {
+	width: 100%;
+}
+
 .gppro-freeform-wrap textarea.css-entry {
 	font-size: 11px;
 	min-height: 160px;
