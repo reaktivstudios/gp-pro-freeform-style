@@ -53,17 +53,18 @@ class GP_Pro_Freeform_CSS
 	private function __construct() {
 
 		// general backend
-		add_action			(	'plugins_loaded',					array(	$this,	'textdomain'				)			);
-		add_action			(	'admin_enqueue_scripts',			array(	$this,	'admin_scripts'				)			);
-		add_action			(	'admin_notices',					array(	$this,	'gppro_active_check'		),	10		);
+		add_action(	'plugins_loaded',					array(	$this,	'textdomain'				)			);
+		add_action(	'admin_enqueue_scripts',			array(	$this,	'admin_scripts'				)			);
+		add_action(	'admin_notices',					array(	$this,	'gppro_active_check'		),	10		);
+		add_action(	'admin_notices',					array(	$this,	'gppro_version_check'		),	10		);
 
 		// GP Pro specific
-		add_action( 'gppro_before_save', array( $this, 'save_custom_css' ) );
-		add_action( 'gppro_after_save', array( $this, 'remove_custom_css' ) );
+		add_action( 'gppro_before_save',                array(  $this,  'save_custom_css'           )           );
+		add_action( 'gppro_after_save',                 array(  $this,  'remove_custom_css'         )           );
 
-		add_filter			(	'gppro_admin_block_add',			array(	$this,	'freeform_block'			),	81		);
-		add_filter			(	'gppro_sections',					array(	$this,	'freeform_section'			),	10,	2	);
-		add_filter			(	'gppro_css_builder',				array(	$this,	'freeform_builder'			),	10,	3	);
+		add_filter(	'gppro_admin_block_add',			array(	$this,	'freeform_block'			),	81		);
+		add_filter(	'gppro_sections',					array(	$this,	'freeform_section'			),	10,	2	);
+		add_filter(	'gppro_css_builder',				array(	$this,	'freeform_builder'			),	10,	3	);
 	}
 
 	/**
@@ -124,6 +125,29 @@ class GP_Pro_Freeform_CSS
 	}
 
 	/**
+	 * Check for valid Design Palette Pro Version
+	 *
+	 * Requires version 1.3.0+
+	 *
+	 * @since 1.0.1
+	 *
+	 */
+	public function gppro_version_check() {
+
+		$dpp_version = defined( 'GPP_VER' ) ? GPP_VER : 0;
+
+		if ( version_compare( $dpp_version, '1.3.0', '<' ) ) {
+			printf(
+				'<div class="updated"><p>' . esc_html__( 'Please upgrade %2$sDesign Palette Pro to version 1.3.0 or greater%3$s to continue using the %1$s extension.', 'gppro' ) . '</p></div>',
+				'<strong>' . 'Genesis Design Palette Pro - eNews Widget' . '</strong>',
+				'<a href="' . esc_url( admin_url( 'plugins.php?plugin_status=upgrade' ) ) . '">',
+				'</a>'
+			);
+		}
+
+	}
+
+	/**
 	 * call admin CSS and JS files
 	 *
 	 * @return
@@ -138,7 +162,7 @@ class GP_Pro_Freeform_CSS
 
 		wp_enqueue_style( 'gppro-freeform',		plugins_url( 'lib/css/gppro.freeform.css',	__FILE__ ),	array(), GPCSS_VER, 'all' );
 
-		wp_enqueue_script( 'textarea-size', 	plugins_url( 'lib/js/autosize.min.js',		__FILE__ ),	array( 'jquery' ), '1.18.1', true );
+		wp_enqueue_script( 'textarea-size', 	plugins_url( 'lib/js/autosize.min.js',		__FILE__ ),	array( 'jquery' ), '1.18.2', true );
 		wp_enqueue_script( 'gppro-freeform',	plugins_url( 'lib/js/gppro.freeform.js',	__FILE__ ),	array( 'jquery' ), GPCSS_VER, true );
 
 
