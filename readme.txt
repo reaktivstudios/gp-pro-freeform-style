@@ -2,7 +2,7 @@
 Contributors: norcross, reaktivstudios, jjeaton
 Requires at least: 3.7
 Tested up to: 4.0
-Stable tag: 1.0.3
+Stable tag: 1.0.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -26,6 +26,10 @@ Install and activate it.
 
 == Changelog ==
 
+= 1.0.4: 2014-10-06 =
+
+* Fixed bug with custom CSS data disappearing on update.
+
 = 1.0.3: 2014-10-02 =
 
 * Fixed escaping issue with certain CSS variables
@@ -42,3 +46,9 @@ Install and activate it.
 = 1.0.0 =
 
 * Initial release
+
+
+== Upgrade Notice ==
+
+= 1.0.4 =
+* Please load the DPP settings page to allow for data updates

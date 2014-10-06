@@ -4,7 +4,7 @@ Plugin Name: Genesis Design Palette Pro - Freeform Style
 Plugin URI: https://genesisdesignpro.com/
 Description: Adds a setting space for freeform CSS
 Author: Reaktiv Studios
-Version: 1.0.3
+Version: 1.0.4
 Requires at least: 3.7
 Author URI: http://andrewnorcross.com
 */
@@ -33,7 +33,7 @@ if( ! defined( 'GPCSS_DIR' ) ) {
 }
 
 if( ! defined( 'GPCSS_VER' ) ) {
-	define( 'GPCSS_VER', '1.0.3' );
+	define( 'GPCSS_VER', '1.0.4' );
 }
 
 class GP_Pro_Freeform_CSS
@@ -54,6 +54,7 @@ class GP_Pro_Freeform_CSS
 
 		// general backend
 		add_action(	'plugins_loaded',					array(	$this,	'textdomain'				)			);
+		add_action( 'admin_init',                       array(  $this,  'data_update_check'         )           );
 		add_action(	'admin_enqueue_scripts',			array(	$this,	'admin_scripts'				)			);
 		add_action(	'admin_notices',					array(	$this,	'gppro_active_check'		),	10		);
 		add_action(	'admin_notices',					array(	$this,	'gppro_version_check'		),	10		);
@@ -73,7 +74,6 @@ class GP_Pro_Freeform_CSS
 	 *
 	 * @return GP_Pro_Freeform_CSS
 	 */
-
 	public static function getInstance() {
 
 		if ( !self::$instance ) {
@@ -88,7 +88,6 @@ class GP_Pro_Freeform_CSS
 	 *
 	 * @return
 	 */
-
 	public function textdomain() {
 
 		load_plugin_textdomain( 'gp-pro-freeform-style', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
@@ -100,7 +99,6 @@ class GP_Pro_Freeform_CSS
 	 *
 	 * @return GP_Pro_Freeform_CSS
 	 */
-
 	public function gppro_active_check() {
 		// get the current screen
 		$screen = get_current_screen();
@@ -144,7 +142,55 @@ class GP_Pro_Freeform_CSS
 				'</a>'
 			);
 		}
+	}
 
+	/**
+	 * check for existing freeform styles and if present
+	 * call update routine to migrate to new setup
+	 *
+	 * @since 1.0.4
+	 *
+	 */
+	public function data_update_check() {
+
+		// get our current screen
+		$screen	= get_current_screen();
+		// bail if we aren't on DPP
+		if ( is_object( $screen ) && $screen->base != 'genesis_page_genesis-palette-pro' ) {
+			return;
+		}
+
+		// check to see if function has been run
+		$migrate_check = get_option( 'gpcss_migrate_check' );
+		// bail if this is already done
+		if ( ! empty( $migrate_check ) ) {
+			return;
+		}
+
+		// check if they have any settings
+		$data = get_option( 'gppro-settings' );
+		// bail if they already exist
+		if ( empty( $data ) ) {
+			return;
+		}
+
+		// check if they have the new settings
+		$custom = get_option( 'gppro-custom-css' );
+		// bail if they already exist
+		if ( ! empty( $custom ) ) {
+			return;
+		}
+
+		// do our version compare
+		$version = defined( 'GPCSS_VER' ) ? GPCSS_VER : 0;
+		// bail if we are beyond the checkpoint version
+		if ( version_compare( $version, '1.0.4', '>' ) ) {
+			return;
+		}
+
+		// run our data update and removal functions
+		$this->freeform_data_update( $data, true );
+		$this->freeform_data_remove( $data, true );
 	}
 
 	/**
@@ -154,18 +200,16 @@ class GP_Pro_Freeform_CSS
 	 */
 	public function admin_scripts() {
 
+		// get our current screen
 		$screen	= get_current_screen();
-
-		if ( $screen->base != 'genesis_page_genesis-palette-pro' ) {
+		// bail if we aren't on DPP
+		if ( is_object( $screen ) && $screen->base != 'genesis_page_genesis-palette-pro' ) {
 			return;
 		}
-
-		wp_enqueue_style( 'gppro-freeform',		plugins_url( 'lib/css/gppro.freeform.css',	__FILE__ ),	array(), GPCSS_VER, 'all' );
-
-		wp_enqueue_script( 'textarea-size', 	plugins_url( 'lib/js/autosize.min.js',		__FILE__ ),	array( 'jquery' ), '1.18.2', true );
-		wp_enqueue_script( 'gppro-freeform',	plugins_url( 'lib/js/gppro.freeform.js',	__FILE__ ),	array( 'jquery' ), GPCSS_VER, true );
-
-
+		// load our stuff
+		wp_enqueue_style( 'gppro-freeform', plugins_url( 'lib/css/gppro.freeform.css', __FILE__ ), array(), GPCSS_VER, 'all' );
+		wp_enqueue_script( 'textarea-size', plugins_url( 'lib/js/autosize.min.js', __FILE__ ), array( 'jquery' ), '1.18.2', true );
+		wp_enqueue_script( 'gppro-freeform', plugins_url( 'lib/js/gppro.freeform.js', __FILE__ ), array( 'jquery' ), GPCSS_VER, true );
 	}
 
 	/**
@@ -174,20 +218,19 @@ class GP_Pro_Freeform_CSS
 	 * @return
 	 */
 	public function freeform_block( $blocks ) {
-
+		// bail if on multisite and user does not have access
 		if ( is_multisite() && ! current_user_can( 'unfiltered_html' ) ) {
 			return $blocks;
 		}
-
+		// create our new block
 		$blocks['freeform-css'] = array(
 			'tab'		=> __( 'Freeform CSS', 'gp-pro-freeform-style' ),
 			'title'		=> __( 'Freeform CSS', 'gp-pro-freeform-style' ),
 			'intro'		=> __( 'Enter any extra or unique CSS in the field below.', 'gp-pro-freeform-style' ),
 			'slug'		=> 'freeform_css',
 		);
-
+		// return the updated array
 		return $blocks;
-
 	}
 
 	/**
@@ -196,9 +239,8 @@ class GP_Pro_Freeform_CSS
 	 * @return
 	 */
 	public function freeform_section( $sections, $class ) {
-
+		// set up the 4 sections
 		$sections['freeform_css']	= array(
-
 			'freeform-css-global-setup'	=> array(
 				'title'		=> __( 'Global CSS', 'gp-pro-freeform-style' ),
 				'data'		=> array(
@@ -210,7 +252,6 @@ class GP_Pro_Freeform_CSS
 					),
 				),
 			),
-
 			'freeform-css-mobile-setup'	=> array(
 				'title'		=> __( 'Mobile CSS', 'gp-pro-freeform-style' ),
 				'data'		=> array(
@@ -222,7 +263,6 @@ class GP_Pro_Freeform_CSS
 					),
 				),
 			),
-
 			'freeform-css-tablet-setup'	=> array(
 				'title'		=> __( 'Tablet CSS', 'gp-pro-freeform-style' ),
 				'data'		=> array(
@@ -234,7 +274,6 @@ class GP_Pro_Freeform_CSS
 					),
 				),
 			),
-
 			'freeform-css-desktop-setup'	=> array(
 				'title'		=> __( 'Desktop CSS', 'gp-pro-freeform-style' ),
 				'data'		=> array(
@@ -246,11 +285,10 @@ class GP_Pro_Freeform_CSS
 					),
 				),
 			),
-
 		); // end section
 
+		// return the updated array
 		return $sections;
-
 	}
 
 	/**
@@ -267,28 +305,25 @@ class GP_Pro_Freeform_CSS
 		$viewport	= isset( $item['viewport'] ) ? esc_attr( $item['viewport'] ) : 'global';
 		// get our custom data
 		$value		= self::get_custom_css( $viewport );
-
 		// start the field
 		$input	= '';
-
+		// set the field wrappers
 		$input	.= '<div class="gppro-input gppro-freeform-input">';
-
 			$input	.= '<div class="gppro-input-wrap gppro-freeform-wrap">';
-
+			// show the description above the field
 			if ( isset( $item['desc'] ) ) {
 				$input	.= '<p class="description">' . esc_attr( $item['desc'] ) . '</p>';
 			}
-
+			// load the textarea itself
 			$input	.= '<textarea name="' . $name . '" id="' . $id . '" class="widefat code css-entry css-global">' . esc_textarea( $value ) . '</textarea>';
-
+			// load the viewport button
 			$input	.= '<span data-viewport="' . $viewport . '" class="button button-secondary button-small gppro-button-right gppro-freeform-preview">'. __( 'Preview CSS', 'gp-pro-freeform-style' ).'</span>';
+			// close up the field wrapper
 			$input	.= '</div>';
-
 		$input	.= '</div>';
 
 		// send it back
 		return $input;
-
 	}
 
 	/**
@@ -298,30 +333,8 @@ class GP_Pro_Freeform_CSS
 	 * @return [type]          [description]
 	 */
 	public function save_custom_css( $choices = array() ) {
-		// set an empty
-		$custom	= array();
-		// check for global
-		if ( ! empty( $choices['freeform-css-global'] ) ) {
-			$custom['global']	= wp_kses_post( stripslashes( $choices['freeform-css-global'] ) );
-		}
-		// check for desktop
-		if ( ! empty( $choices['freeform-css-desktop'] ) ) {
-			$custom['desktop']	= wp_kses_post( stripslashes( $choices['freeform-css-desktop'] ) );
-		}
-		// check for tablet
-		if ( ! empty( $choices['freeform-css-tablet'] ) ) {
-			$custom['tablet']	= wp_kses_post( stripslashes( $choices['freeform-css-tablet'] ) );
-		}
-		// check for mobile
-		if ( ! empty( $choices['freeform-css-mobile'] ) ) {
-			$custom['mobile']	= wp_kses_post( stripslashes( $choices['freeform-css-mobile'] ) );
-		}
-		// save our custom CSS
-		if ( ! empty( $custom ) ) {
-			update_option( 'gppro-custom-css', $custom );
-		} else {
-			delete_option( 'gppro-custom-css' );
-		}
+		// pass the data on to our save function
+		$this->freeform_data_update( $choices );
 	}
 
 	/**
@@ -331,47 +344,12 @@ class GP_Pro_Freeform_CSS
 	 * @return [type]           [description]
 	 */
 	public function remove_custom_css( $updated = array() ) {
-		// check for global
-		if ( ! empty( $updated['freeform-css-global'] ) ) {
-			unset( $updated['freeform-css-global'] );
-		}
-		// check for desktop
-		if ( ! empty( $updated['freeform-css-desktop'] ) ) {
-			unset( $updated['freeform-css-desktop'] );
-		}
-		// check for tablet
-		if ( ! empty( $updated['freeform-css-tablet'] ) ) {
-			unset( $updated['freeform-css-tablet'] );
-		}
-		// check for mobile
-		if ( ! empty( $updated['freeform-css-mobile'] ) ) {
-			unset( $updated['freeform-css-mobile'] );
-		}
-		// save our custom CSS
-		if ( ! empty( $updated ) ) {
-			update_option( 'gppro-settings', $updated );
-		}
+		// pass the data on to our removal function
+		$this->freeform_data_remove( $updated );
 	}
 
 	/**
-	 * retrieve the saved value if it exists
-	 *
-	 * @param  string $viewport [description]
-	 * @return [type]           [description]
-	 */
-	public static function get_custom_css( $viewport = '' ) {
-		// first check for custom CSS
-		$custom	= get_option( 'gppro-custom-css' );
-		// if no custom for that viewport, just return
-		if ( empty( $custom ) || empty( $custom[$viewport] ) ) {
-			return;
-		}
-		// send it back
-		return $custom[$viewport];
-	}
-
-	/**
-	 * add freeform CSS to builder file
+	 * add freeform CSS data to builder file
 	 *
 	 * @param  [type] $setup [description]
 	 * @param  [type] $data  [description]
@@ -411,6 +389,95 @@ class GP_Pro_Freeform_CSS
 		}
 		// return the new data to be written
 		return $setup;
+	}
+
+	/**
+	 * retrieve the saved value if it exists
+	 *
+	 * @param  string $viewport [description]
+	 * @return [type]           [description]
+	 */
+	public static function get_custom_css( $viewport = '' ) {
+		// first check for custom CSS
+		$custom	= get_option( 'gppro-custom-css' );
+		// if no custom for that viewport, just return
+		if ( empty( $custom ) || empty( $custom[$viewport] ) ) {
+			return;
+		}
+		// send it back
+		return $custom[$viewport];
+	}
+
+	/**
+	 * move our freeform data from the global array to the specific one
+	 *
+	 * @param  array  $data [description]
+	 * @return [type]       [description]
+	 */
+	public static function freeform_data_update( $data = array(), $migrate = false ) {
+		// set an empty
+		$update =  array();
+
+		// check for global
+		if ( ! empty( $data['freeform-css-global'] ) ) {
+			$update['global']	= wp_kses_post( stripslashes( $data['freeform-css-global'] ) );
+		}
+		// check for desktop
+		if ( ! empty( $data['freeform-css-desktop'] ) ) {
+			$update['desktop']	= wp_kses_post( stripslashes( $data['freeform-css-desktop'] ) );
+		}
+		// check for tablet
+		if ( ! empty( $data['freeform-css-tablet'] ) ) {
+			$update['tablet']	= wp_kses_post( stripslashes( $data['freeform-css-tablet'] ) );
+		}
+		// check for mobile
+		if ( ! empty( $data['freeform-css-mobile'] ) ) {
+			$update['mobile']	= wp_kses_post( stripslashes( $data['freeform-css-mobile'] ) );
+		}
+		// save our custom CSS
+		if ( ! empty( $update ) ) {
+			update_option( 'gppro-custom-css', $update );
+		} else {
+			delete_option( 'gppro-custom-css' );
+		}
+		// set our update flag if need be
+		if ( ! empty( $migrate ) ) {
+			update_option( 'gpcss_migrate_check', 1 );
+		}
+	}
+
+	/**
+	 * remove the custom CSS values from the global array
+	 *
+	 * @param  array  $data [description]
+	 * @return [type]           [description]
+	 */
+	public static function freeform_data_remove( $data = array(), $migrate = false ) {
+		// check for global
+		if ( ! empty( $data['freeform-css-global'] ) ) {
+			unset( $data['freeform-css-global'] );
+		}
+		// check for desktop
+		if ( ! empty( $data['freeform-css-desktop'] ) ) {
+			unset( $data['freeform-css-desktop'] );
+		}
+		// check for tablet
+		if ( ! empty( $data['freeform-css-tablet'] ) ) {
+			unset( $data['freeform-css-tablet'] );
+		}
+		// check for mobile
+		if ( ! empty( $data['freeform-css-mobile'] ) ) {
+			unset( $data['freeform-css-mobile'] );
+		}
+		// save our custom CSS
+		if ( ! empty( $data ) ) {
+			update_option( 'gppro-settings', $data );
+		}
+		// reload the page if we're doing our data migration
+		if ( ! empty( $migrate ) ) {
+			wp_redirect( menu_page_url( 'genesis-palette-pro', 0 ) );
+			exit;
+		}
 	}
 
 /// end class
