@@ -47,8 +47,3 @@ Install and activate it.
 
 * Initial release
 
-
-== Upgrade Notice ==
-
-= 1.0.4 =
-* Please load the DPP settings page to allow for data updates

@@ -54,7 +54,6 @@ class GP_Pro_Freeform_CSS
 
 		// general backend
 		add_action(	'plugins_loaded',					array(	$this,	'textdomain'				)			);
-		add_action( 'admin_init',                       array(  $this,  'data_update_check'         )           );
 		add_action(	'admin_enqueue_scripts',			array(	$this,	'admin_scripts'				)			);
 		add_action(	'admin_notices',					array(	$this,	'gppro_active_check'		),	10		);
 		add_action(	'admin_notices',					array(	$this,	'gppro_version_check'		),	10		);
@@ -142,55 +141,6 @@ class GP_Pro_Freeform_CSS
 				'</a>'
 			);
 		}
-	}
-
-	/**
-	 * check for existing freeform styles and if present
-	 * call update routine to migrate to new setup
-	 *
-	 * @since 1.0.4
-	 *
-	 */
-	public function data_update_check() {
-
-		// get our current screen
-		$screen	= get_current_screen();
-		// bail if we aren't on DPP
-		if ( is_object( $screen ) && $screen->base != 'genesis_page_genesis-palette-pro' ) {
-			return;
-		}
-
-		// check to see if function has been run
-		$migrate_check = get_option( 'gpcss_migrate_check' );
-		// bail if this is already done
-		if ( ! empty( $migrate_check ) ) {
-			return;
-		}
-
-		// check if they have any settings
-		$data = get_option( 'gppro-settings' );
-		// bail if they already exist
-		if ( empty( $data ) ) {
-			return;
-		}
-
-		// check if they have the new settings
-		$custom = get_option( 'gppro-custom-css' );
-		// bail if they already exist
-		if ( ! empty( $custom ) ) {
-			return;
-		}
-
-		// do our version compare
-		$version = defined( 'GPCSS_VER' ) ? GPCSS_VER : 0;
-		// bail if we are beyond the checkpoint version
-		if ( version_compare( $version, '1.0.4', '>' ) ) {
-			return;
-		}
-
-		// run our data update and removal functions
-		$this->freeform_data_update( $data, true );
-		$this->freeform_data_remove( $data, true );
 	}
 
 	/**
@@ -333,8 +283,31 @@ class GP_Pro_Freeform_CSS
 	 * @return [type]          [description]
 	 */
 	public function save_custom_css( $choices = array() ) {
-		// pass the data on to our save function
-		$this->freeform_data_update( $choices );
+		// set an empty
+		$update =  array();
+
+		// check for global
+		if ( ! empty( $choices['freeform-css-global'] ) ) {
+			$update['global']	= wp_kses_post( stripslashes( $choices['freeform-css-global'] ) );
+		}
+		// check for desktop
+		if ( ! empty( $choices['freeform-css-desktop'] ) ) {
+			$update['desktop']	= wp_kses_post( stripslashes( $choices['freeform-css-desktop'] ) );
+		}
+		// check for tablet
+		if ( ! empty( $choices['freeform-css-tablet'] ) ) {
+			$update['tablet']	= wp_kses_post( stripslashes( $choices['freeform-css-tablet'] ) );
+		}
+		// check for mobile
+		if ( ! empty( $choices['freeform-css-mobile'] ) ) {
+			$update['mobile']	= wp_kses_post( stripslashes( $choices['freeform-css-mobile'] ) );
+		}
+		// save our custom CSS
+		if ( ! empty( $update ) ) {
+			update_option( 'gppro-custom-css', $update );
+		} else {
+			delete_option( 'gppro-custom-css' );
+		}
 	}
 
 	/**
@@ -344,8 +317,26 @@ class GP_Pro_Freeform_CSS
 	 * @return [type]           [description]
 	 */
 	public function remove_custom_css( $updated = array() ) {
-		// pass the data on to our removal function
-		$this->freeform_data_remove( $updated );
+		// check for global
+		if ( ! empty( $updated['freeform-css-global'] ) ) {
+			unset( $updated['freeform-css-global'] );
+		}
+		// check for desktop
+		if ( ! empty( $updated['freeform-css-desktop'] ) ) {
+			unset( $updated['freeform-css-desktop'] );
+		}
+		// check for tablet
+		if ( ! empty( $updated['freeform-css-tablet'] ) ) {
+			unset( $updated['freeform-css-tablet'] );
+		}
+		// check for mobile
+		if ( ! empty( $updated['freeform-css-mobile'] ) ) {
+			unset( $updated['freeform-css-mobile'] );
+		}
+		// save our custom CSS
+		if ( ! empty( $updated ) ) {
+			update_option( 'gppro-settings', $updated );
+		}
 	}
 
 	/**
@@ -400,84 +391,37 @@ class GP_Pro_Freeform_CSS
 	public static function get_custom_css( $viewport = '' ) {
 		// first check for custom CSS
 		$custom	= get_option( 'gppro-custom-css' );
-		// if no custom for that viewport, just return
-		if ( empty( $custom ) || empty( $custom[$viewport] ) ) {
-			return;
+		// if data for that viewport exists, send it back
+		if ( ! empty( $custom[$viewport] ) ) {
+			return $custom[$viewport];
 		}
-		// send it back
-		return $custom[$viewport];
+		// check our legacy settings
+		$legacy = self::get_legacy_css( $viewport );
+		// if we have legacy data, return that
+		if ( ! empty( $legacy ) ) {
+			return $legacy;
+		}
+		// we have nothing, so just return false
+		return false;
 	}
 
 	/**
-	 * move our freeform data from the global array to the specific one
+	 * check for CSS data in global array (old method)
 	 *
-	 * @param  array  $data [description]
-	 * @return [type]       [description]
-	 */
-	public static function freeform_data_update( $data = array(), $migrate = false ) {
-		// set an empty
-		$update =  array();
-
-		// check for global
-		if ( ! empty( $data['freeform-css-global'] ) ) {
-			$update['global']	= wp_kses_post( stripslashes( $data['freeform-css-global'] ) );
-		}
-		// check for desktop
-		if ( ! empty( $data['freeform-css-desktop'] ) ) {
-			$update['desktop']	= wp_kses_post( stripslashes( $data['freeform-css-desktop'] ) );
-		}
-		// check for tablet
-		if ( ! empty( $data['freeform-css-tablet'] ) ) {
-			$update['tablet']	= wp_kses_post( stripslashes( $data['freeform-css-tablet'] ) );
-		}
-		// check for mobile
-		if ( ! empty( $data['freeform-css-mobile'] ) ) {
-			$update['mobile']	= wp_kses_post( stripslashes( $data['freeform-css-mobile'] ) );
-		}
-		// save our custom CSS
-		if ( ! empty( $update ) ) {
-			update_option( 'gppro-custom-css', $update );
-		} else {
-			delete_option( 'gppro-custom-css' );
-		}
-		// set our update flag if need be
-		if ( ! empty( $migrate ) ) {
-			update_option( 'gpcss_migrate_check', 1 );
-		}
-	}
-
-	/**
-	 * remove the custom CSS values from the global array
-	 *
-	 * @param  array  $data [description]
+	 * @param  string $viewport [description]
 	 * @return [type]           [description]
 	 */
-	public static function freeform_data_remove( $data = array(), $migrate = false ) {
-		// check for global
-		if ( ! empty( $data['freeform-css-global'] ) ) {
-			unset( $data['freeform-css-global'] );
+	public static function get_legacy_css( $viewport = '' ) {
+		// set the viewport string to the old version
+		$viewport = 'freeform-css-' . $viewport;
+		// get our global settings
+		$data	= get_option( 'gppro-settings' );
+		// if data for that viewport exists, send it back
+		if ( ! empty( $data[$viewport] ) ) {
+			return $data[$viewport];
 		}
-		// check for desktop
-		if ( ! empty( $data['freeform-css-desktop'] ) ) {
-			unset( $data['freeform-css-desktop'] );
-		}
-		// check for tablet
-		if ( ! empty( $data['freeform-css-tablet'] ) ) {
-			unset( $data['freeform-css-tablet'] );
-		}
-		// check for mobile
-		if ( ! empty( $data['freeform-css-mobile'] ) ) {
-			unset( $data['freeform-css-mobile'] );
-		}
-		// save our custom CSS
-		if ( ! empty( $data ) ) {
-			update_option( 'gppro-settings', $data );
-		}
-		// reload the page if we're doing our data migration
-		if ( ! empty( $migrate ) ) {
-			wp_redirect( menu_page_url( 'genesis-palette-pro', 0 ) );
-			exit;
-		}
+		// return false if we dont have it
+		return false;
 	}
 
 /// end class
