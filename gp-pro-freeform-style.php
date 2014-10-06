@@ -412,6 +412,12 @@ class GP_Pro_Freeform_CSS
 		if ( ! empty( $data[$viewport] ) ) {
 			return $data[$viewport];
 		}
+		// get our backup settings
+		$backup	= get_option( 'gppro-settings-backup' );
+		// if data for that viewport exists, send it back
+		if ( ! empty( $backup[$viewport] ) ) {
+			return $backup[$viewport];
+		}
 		// return false if we dont have it
 		return false;
 	}
