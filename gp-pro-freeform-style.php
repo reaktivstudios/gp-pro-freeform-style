@@ -348,34 +348,26 @@ class GP_Pro_Freeform_CSS
 	 * @return [type]        [description]
 	 */
 	public function freeform_builder( $setup, $data, $class ) {
-		// first check for custom CSS
-		$custom	= get_option( 'gppro-custom-css' );
-		// if no custom, just return
-		if ( empty( $custom ) ) {
-			return $setup;
-		}
-		// now add our custom CSS to the mix
-		$setup	.= '/* custom freeform CSS */'."\n";
 		// our global CSS
-		if ( ! empty( $custom['global'] ) ) {
-			$setup	.= $custom['global']."\n\n";
+		if ( self::get_custom_css( 'global' ) ) {
+			$setup	.= self::get_custom_css( 'global' ) . "\n\n";
 		}
 		// our mobile CSS
-		if ( ! empty( $custom['mobile'] )  ) {
+		if ( self::get_custom_css( 'mobile' ) ) {
 			$setup	.= '@media only screen and (max-width: 480px) {'."\n";
-			$setup	.= $custom['mobile']."\n";
+			$setup	.= self::get_custom_css( 'mobile' ) . "\n\n";
 			$setup	.= '}'."\n\n";
 		}
 		// our tablet CSS
-		if ( ! empty( $custom['tablet'] )  ) {
+		if ( self::get_custom_css( 'tablet' ) ) {
 			$setup	.= '@media only screen and (max-width: 768px) {'."\n";
-			$setup	.= $custom['tablet']."\n";
+			$setup	.= self::get_custom_css( 'tablet' ) . "\n\n";
 			$setup	.= '}'."\n\n";
 		}
 		// our desktop CSS
-		if ( ! empty( $custom['desktop'] )  ) {
+		if ( self::get_custom_css( 'desktop' ) ) {
 			$setup	.= '@media only screen and (min-width: 1024px) {'."\n";
-			$setup	.= $custom['desktop']."\n";
+			$setup	.= self::get_custom_css( 'desktop' ) . "\n\n";
 			$setup	.= '}'."\n\n";
 		}
 		// return the new data to be written
