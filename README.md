@@ -1,16 +1,16 @@
 # Genesis Design Palette Pro - Freeform Style #
 **Contributors:** norcross, reaktivstudios, jjeaton
-  
+
 **Requires at least:** 3.7
-  
+
 **Tested up to:** 4.3
-  
-**Stable tag:** 1.0.5
-  
+
+**Stable tag:** 1.0.6
+
 **License:** GPLv2 or later
-  
+
 **License URI:** http://www.gnu.org/licenses/gpl-2.0.html
-  
+
 
 Adds an area for freeform CSS entry in Genesis Design Palette Pro
 
@@ -31,6 +31,10 @@ Install and activate it.
 ## Screenshots ##
 
 ## Changelog ##
+
+### 1.0.6: 2015-10-05 ###
+
+* Set up proper sanitization and escaping for CSS combinations.
 
 ### 1.0.5: 2015-09-24 ###
 
