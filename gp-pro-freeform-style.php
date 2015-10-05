@@ -258,7 +258,7 @@ class GP_Pro_Freeform_CSS
 			$input .= ! empty( $item['desc'] ) ? '<p class="description">' . esc_html( $item['desc'] ) . '</p>' :'';
 
 			// Load the textarea itself.
-			$input .= '<textarea name="' . esc_attr( $name ) . '" id="' . esc_attr( $id ) . '" class="widefat code css-entry css-global">' . esc_textarea( $value ) . '</textarea>';
+			$input .= '<textarea name="' . esc_attr( $name ) . '" id="' . esc_attr( $id ) . '" class="widefat code css-entry css-global">' . esc_html( $value ) . '</textarea>';
 
 			// Load the viewport button.
 			$input .= '<span data-viewport="' . esc_attr( $view ) . '" class="button button-secondary button-small gppro-button-right gppro-freeform-preview">'. __( 'Preview CSS', 'gp-pro-freeform-style' ).'</span>';
@@ -359,32 +359,51 @@ class GP_Pro_Freeform_CSS
 
 		// Our global CSS.
 		if ( false !== $global = self::get_custom_css( 'global' ) ) {
-			$setup  .= $global . "\n\n";
+			$setup .= self::escape_freeform_css( $global ) . "\n\n";
 		}
 
 		// Our mobile CSS.
 		if ( false !== $mobile = self::get_custom_css( 'mobile' ) ) {
-			$setup  .= '@media only screen and (max-width: 480px) {' . "\n";
-			$setup  .= $mobile . "\n\n";
-			$setup  .= '}' . "\n\n";
+			$setup .= '@media only screen and (max-width: 480px) {' . "\n";
+			$setup .= self::escape_freeform_css( $mobile ) . "\n\n";
+			$setup .= '}' . "\n\n";
 		}
 
 		// Our tablet CSS.
 		if ( false !== $tablet = self::get_custom_css( 'tablet' ) ) {
-			$setup  .= '@media only screen and (max-width: 768px) {' . "\n";
-			$setup  .= $tablet . "\n\n";
-			$setup  .= '}' . "\n\n";
+			$setup .= '@media only screen and (max-width: 768px) {' . "\n";
+			$setup .= self::escape_freeform_css( $tablet ) . "\n\n";
+			$setup .= '}' . "\n\n";
 		}
 
 		// Our desktop CSS.
 		if ( false !== $desktop = self::get_custom_css( 'desktop' ) ) {
-			$setup  .= '@media only screen and (min-width: 1024px) {' . "\n";
-			$setup  .= $desktop . "\n\n";
-			$setup  .= '}' . "\n\n";
+			$setup .= '@media only screen and (min-width: 1024px) {' . "\n";
+			$setup .= self::escape_freeform_css( $desktop ) . "\n\n";
+			$setup .= '}' . "\n\n";
 		}
 
 		// Return the new data to be written.
 		return $setup;
+	}
+
+	/**
+	 * Take the CSS data stored in the settings row and escape it for proper output.
+	 *
+	 * @param  string $data the sanitized CSS data stored.
+	 *
+	 * @return string $data the escaped and encoded CSS data to output.
+	 */
+	public static function escape_freeform_css( $data = '' ) {
+
+		// First escape it.
+		$data   = esc_html( $data );
+
+		// Now decode it.
+		$data   = html_entity_decode( $data );
+
+		// And return it, filtered.
+		return apply_filters( 'gppro_freeform_css_escaped', $data );
 	}
 
 	/**
