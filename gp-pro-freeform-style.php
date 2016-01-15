@@ -4,8 +4,8 @@ Plugin Name: Genesis Design Palette Pro - Freeform Style
 Plugin URI: https://genesisdesignpro.com/
 Description: Adds a setting space for freeform CSS
 Author: Reaktiv Studios
-Version: 1.0.6
-Requires at least: 3.7
+Version: 1.0.7
+Requires at least: 4.0
 Author URI: http://andrewnorcross.com
 */
 
@@ -38,7 +38,7 @@ if ( ! defined( 'GPCSS_DIR' ) ) {
 
 // Define my plugin version number.
 if ( ! defined( 'GPCSS_VER' ) ) {
-	define( 'GPCSS_VER', '1.0.6' );
+	define( 'GPCSS_VER', '1.0.7' );
 }
 
 /**
@@ -396,8 +396,11 @@ class GP_Pro_Freeform_CSS
 	 */
 	public static function escape_freeform_css( $data = '' ) {
 
-		// First escape it.
-		$data   = esc_html( $data );
+		// Convert single quotes to double quotes.
+		$data   = str_replace( '\'', '"', $data );
+
+		// Escape it.
+		$data   = esc_attr( $data );
 
 		// Now decode it.
 		$data   = html_entity_decode( $data );
