@@ -6,7 +6,7 @@ Description: Adds a setting space for freeform CSS
 Author: Reaktiv Studios
 Version: 1.0.7
 Requires at least: 4.0
-Author URI: http://andrewnorcross.com
+Author URI: https://genesisdesignpro.com
 */
 
 /*
