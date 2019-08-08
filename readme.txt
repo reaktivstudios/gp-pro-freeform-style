@@ -1,8 +1,8 @@
 === Genesis Design Palette Pro - Freeform Style ===
 Contributors: norcross, reaktivstudios, jjeaton
 Requires at least: 4.0
-Tested up to: 4.9
-Stable tag: 1.0.7
+Tested up to: 5.2.2
+Stable tag: 1.0.8
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -25,6 +25,10 @@ Install and activate it.
 == Screenshots ==
 
 == Changelog ==
+
+= 1.0.8: 2019-08-07 =
+
+* Fixed bug for better mobile responsiveness.
 
 = 1.0.7: 2016-01-15 =
 
