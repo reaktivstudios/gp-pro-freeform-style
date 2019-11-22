@@ -4,7 +4,7 @@ Plugin Name: Genesis Design Palette Pro - Freeform Style
 Plugin URI: https://genesisdesignpro.com/
 Description: Adds a setting space for freeform CSS
 Author: Reaktiv Studios
-Version: 1.0.7
+Version: 1.0.8
 Requires at least: 4.0
 Author URI: https://genesisdesignpro.com
 */
@@ -188,13 +188,13 @@ class GP_Pro_Freeform_CSS
 					),
 				),
 			),
-			'freeform-css-mobile-setup' => array(
-				'title'     => __( 'Mobile CSS', 'gp-pro-freeform-style' ),
+			'freeform-css-desktop-setup'    => array(
+				'title'     => __( 'Desktop CSS', 'gp-pro-freeform-style' ),
 				'data'      => array(
-					'freeform-css-mobile'   => array(
+					'freeform-css-desktop'  => array(
 						'input'     => 'custom',
-						'desc'      => __( 'This CSS will apply to 480px and below', 'gp-pro-freeform-style' ),
-						'viewport'  => 'mobile',
+						'desc'      => __( 'This CSS will apply to 1024px and above', 'gp-pro-freeform-style' ),
+						'viewport'  => 'desktop',
 						'callback'  => array( $this, 'freeform_css_input' ),
 					),
 				),
@@ -210,13 +210,13 @@ class GP_Pro_Freeform_CSS
 					),
 				),
 			),
-			'freeform-css-desktop-setup'    => array(
-				'title'     => __( 'Desktop CSS', 'gp-pro-freeform-style' ),
+			'freeform-css-mobile-setup' => array(
+				'title'     => __( 'Mobile CSS', 'gp-pro-freeform-style' ),
 				'data'      => array(
-					'freeform-css-desktop'  => array(
+					'freeform-css-mobile'   => array(
 						'input'     => 'custom',
-						'desc'      => __( 'This CSS will apply to 1024px and above', 'gp-pro-freeform-style' ),
-						'viewport'  => 'desktop',
+						'desc'      => __( 'This CSS will apply to 480px and below', 'gp-pro-freeform-style' ),
+						'viewport'  => 'mobile',
 						'callback'  => array( $this, 'freeform_css_input' ),
 					),
 				),
@@ -362,10 +362,10 @@ class GP_Pro_Freeform_CSS
 			$setup .= self::escape_freeform_css( $global ) . "\n\n";
 		}
 
-		// Our mobile CSS.
-		if ( false !== $mobile = self::get_custom_css( 'mobile' ) ) {
-			$setup .= '@media only screen and (max-width: 480px) {' . "\n";
-			$setup .= self::escape_freeform_css( $mobile ) . "\n\n";
+		// Our desktop CSS.
+		if ( false !== $desktop = self::get_custom_css( 'desktop' ) ) {
+			$setup .= '@media only screen and (min-width: 1024px) {' . "\n";
+			$setup .= self::escape_freeform_css( $desktop ) . "\n\n";
 			$setup .= '}' . "\n\n";
 		}
 
@@ -376,10 +376,10 @@ class GP_Pro_Freeform_CSS
 			$setup .= '}' . "\n\n";
 		}
 
-		// Our desktop CSS.
-		if ( false !== $desktop = self::get_custom_css( 'desktop' ) ) {
-			$setup .= '@media only screen and (min-width: 1024px) {' . "\n";
-			$setup .= self::escape_freeform_css( $desktop ) . "\n\n";
+		// Our mobile CSS.
+		if ( false !== $mobile = self::get_custom_css( 'mobile' ) ) {
+			$setup .= '@media only screen and (max-width: 480px) {' . "\n";
+			$setup .= self::escape_freeform_css( $mobile ) . "\n\n";
 			$setup .= '}' . "\n\n";
 		}
 
