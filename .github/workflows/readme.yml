@@ -10,7 +10,7 @@ jobs:
     steps:
     - uses: actions/checkout@master
     - name: Build Readme.txt
-    - run: curl -L https://raw.githubusercontent.com/fumikito/wp-readme/master/wp-readme.php | php
+      run: curl -L https://raw.githubusercontent.com/fumikito/wp-readme/master/wp-readme.php | php
     - name: WordPress.org plugin asset/readme update
       uses: 10up/action-wordpress-plugin-asset-update@master
       env:
