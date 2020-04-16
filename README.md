@@ -16,9 +16,12 @@
 Adds an area for freeform CSS entry in Genesis Design Palette Pro
 
 ## Description
+
 Adds an area for freeform CSS entry in Genesis Design Palette Pro. Requires the [Genesis Design Palette Pro](http://genesisdesignpro.com/ "Genesis Design Palette Pro") plugin.
 
-## Installation1. Upload the `gp-pro-freeform-style` folder and all its contents to the `/wp-content/plugins/` directory
+## Installation
+
+1. Upload the `gp-pro-freeform-style` folder and all its contents to the `/wp-content/plugins/` directory
 1. Activate the plugin through the 'Plugins' menu in WordPress
 
 ## Frequently Asked Questions
