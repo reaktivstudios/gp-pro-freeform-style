@@ -1,5 +1,4 @@
 # Genesis Design Palette Pro - Freeform Style
-
 Contributors: norcross, reaktivstudios, jjeaton
 Requires at least: 4.0
 Tested up to: 5.4
